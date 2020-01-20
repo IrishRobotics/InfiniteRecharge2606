@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.*;
 //https://oblog-docs.readthedocs.io/en/latest/getting-started.html
 //https://oblog-docs.readthedocs.io/en/latest/   https://github.com/Oblarg/Oblog
 
@@ -48,15 +49,12 @@ public class Robot extends TimedRobot {
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
 
     //Dead space in joy stick
-    @Log
     left  = Math.abs(left)  < 0.10 ? 0 : left;
-    @Log
     right = Math.abs(right) < 0.10 ? 0 : right;
 
     //Do diffrential Drive based on tank drive
     _diffDrive.tankDrive(left, right);
   }
-
 
   @Override
   public void robotInit() {
@@ -79,8 +77,8 @@ public class Robot extends TimedRobot {
     _leftFront.setInverted(false); // !< Update this
 
     /* set the invert of the followers to match their respective master controllers*/
-    _rightBack.setInverted(InvertType.FollowMaster);
-    _leftBack.setInverted(InvertType.FollowMaster);
+    _rightBack.setInverted(true);
+    _leftBack.setInverted(false);
 
     /* adjust sensor phase so sensor moves positive when Talon LEDs are green */
     _rightFront.setSensorPhase(true);

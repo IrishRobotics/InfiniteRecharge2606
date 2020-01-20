@@ -39,5 +39,5 @@ public class Map{
     public static final double speedMax = 0.8;
 
     /* Nonzero to block the config until success, zero to skip checking */
-    final int kTimeoutMs = 30;
+    public static final int kTimeoutMs = 30;
 }
