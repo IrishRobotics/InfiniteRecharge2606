@@ -23,26 +23,30 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  //Drive Train Motor Controllers 
   WPI_TalonSRX _rightFront = new WPI_TalonSRX(Map.frontRightTalon);
   WPI_TalonSRX _leftFront = new WPI_TalonSRX(Map.frontLeftTalon);
   WPI_TalonSRX _rightBack = new WPI_TalonSRX(Map.backRightTalon);
   WPI_TalonSRX _leftBack = new WPI_TalonSRX(Map.backLeftTalon);
 
+  //Diffrential Drive setup for front motors 
   DifferentialDrive _diffDrive = new DifferentialDrive(_leftFront, _rightFront);
 
+  //Init flight sticks
   Joystick _leftFL = new Joystick(Map.leftFLUsb);
   Joystick _rightFL = new Joystick(Map.rightFLUsb);
 
   @Override
   public void teleopPeriodic() {
     //Calculate angle of joystick y
-    double left = (Map.reverse?1: -1) * _leftFL.getRawAxis(1) * Map.speedMax; /* positive is forward */
-    double right = (Map.reverse?1: -1) * _rightFL.getRawAxis(1) * Map.speedMax; /* positive is right */ 
+    double left  = (Map.reverse ? 1 : -1) * _leftFL.getRawAxis(1)  * Map.speedMax; 
+    double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
 
     //Dead space in joy stick
-    left = Math.abs(left) < 0.10?0:left;
-    right = Math.abs(right) < 0.10?0:right;
+    left  = Math.abs(left)  < 0.10 ? 0 : left;
+    right = Math.abs(right) < 0.10 ? 0 : right;
 
+    //Do diffrential Drive based on tank drive
     _diffDrive.tankDrive(left, right);
   }
 
@@ -63,19 +67,15 @@ public class Robot extends TimedRobot {
     _rightBack.follow(_rightFront);
     _leftBack.follow(_leftFront);
 
-    /* [3] flip values so robot moves forward when stick-forward/LEDs-green */
+    /* flip values so robot moves forward when stick-forward/LEDs-green */
     _rightFront.setInverted(true); // !< Update this
     _leftFront.setInverted(false); // !< Update this
 
-    /*
-     * set the invert of the followers to match their respective master controllers
-     */
+    /* set the invert of the followers to match their respective master controllers*/
     _rightBack.setInverted(InvertType.FollowMaster);
     _leftBack.setInverted(InvertType.FollowMaster);
 
-    /*
-     * [4] adjust sensor phase so sensor moves positive when Talon LEDs are green
-     */
+    /* adjust sensor phase so sensor moves positive when Talon LEDs are green */
     _rightFront.setSensorPhase(true);
     _leftFront.setSensorPhase(true);
 
