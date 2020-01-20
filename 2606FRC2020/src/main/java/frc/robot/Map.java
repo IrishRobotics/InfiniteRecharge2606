@@ -4,10 +4,14 @@ package frc.robot;
 
 public class Map{
     
-    //Can/PWM/PCM addresses for Motor controllers and Solinoides CAN(Controller Area Network) -- PWM (Pulse Width Modulation) -- PCM (Pneumatics Control Module)
+    //Can/PWM/PCM/PID addresses for Motor controllers and Solinoides 
+    //CAN(Controller Area Network) -- PWM (Pulse Width Modulation)  
+    //PCM (Pneumatics Control Module) -- PID (Proportional Integral Derivative)
         //Drive Train
         public static final int frontRightTalon = 1; //CAN
+        public static final int frontRightEncoder = 0; //PID
         public static final int frontLeftTalon = 2; //CAN
+        public static final int frontLeftEncoder = 1; //PID
         public static final int backRightTalon = 3; //CAN
         public static final int backLeftTalon = 4; //CAN
         //Intake
@@ -33,4 +37,7 @@ public class Map{
 
     //Change max speed
     public static final double speedMax = 0.8;
+
+    /* Nonzero to block the config until success, zero to skip checking */
+    final int kTimeoutMs = 30;
 }

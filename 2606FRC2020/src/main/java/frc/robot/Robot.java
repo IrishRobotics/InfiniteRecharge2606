@@ -12,10 +12,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix.motorcontrol.*;
+//import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+import io.github.oblarg.oblog.Logger;
+//https://oblog-docs.readthedocs.io/en/latest/getting-started.html
+//https://oblog-docs.readthedocs.io/en/latest/   https://github.com/Oblarg/Oblog
 
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
@@ -43,7 +48,9 @@ public class Robot extends TimedRobot {
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
 
     //Dead space in joy stick
+    @Log
     left  = Math.abs(left)  < 0.10 ? 0 : left;
+    @Log
     right = Math.abs(right) < 0.10 ? 0 : right;
 
     //Do diffrential Drive based on tank drive
@@ -84,10 +91,22 @@ public class Robot extends TimedRobot {
      * this so we can apply + to both sides when moving forward. DO NOT CHANGE
      */
     _diffDrive.setRightSideInverted(false);
+
+    _rightFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,/* Feedback*/ 
+    Map.frontRightEncoder, Map.kTimeoutMs);
+    
+    _leftFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,/* Feedback*/ 
+    Map.frontLeftEncoder, Map.kTimeoutMs);
+
+    //OBlog shuffleboard setup
+    Logger.configureLoggingAndConfig(this, false);
   }
 
   @Override
   public void robotPeriodic() {
+
+    Logger.updateEntries();
+
   }
 
   @Override
