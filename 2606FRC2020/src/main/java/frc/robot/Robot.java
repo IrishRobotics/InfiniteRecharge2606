@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -32,8 +34,8 @@ public class Robot extends TimedRobot {
   //Drive Train Motor Controllers 
   WPI_TalonSRX _rightFront = new WPI_TalonSRX(Map.frontRightTalon);
   WPI_TalonSRX _leftFront = new WPI_TalonSRX(Map.frontLeftTalon);
-  WPI_TalonSRX _rightBack = new WPI_TalonSRX(Map.backRightTalon);
-  WPI_TalonSRX _leftBack = new WPI_TalonSRX(Map.backLeftTalon);
+  WPI_VictorSPX _rightBack = new WPI_VictorSPX(Map.backRightVictor);
+  WPI_VictorSPX _leftBack = new WPI_VictorSPX(Map.backLeftVictor);
 
   //Diffrential Drive setup for front motors 
   DifferentialDrive _diffDrive = new DifferentialDrive(_leftFront, _rightFront);

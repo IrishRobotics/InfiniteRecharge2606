@@ -9,11 +9,11 @@ public class Map{
     //PCM (Pneumatics Control Module) -- PID (Proportional Integral Derivative)
         //Drive Train
         public static final int frontRightTalon = 1; //CAN
-        public static final int frontRightEncoder = 0; //PID
+            public static final int frontRightEncoder = 0; //PID
         public static final int frontLeftTalon = 2; //CAN
-        public static final int frontLeftEncoder = 1; //PID
-        public static final int backRightTalon = 3; //CAN
-        public static final int backLeftTalon = 4; //CAN
+            public static final int frontLeftEncoder = 1; //PID
+        public static final int backRightVictor = 3; //CAN
+        public static final int backLeftVictor = 4; //CAN
         //Intake
         public static final int intakeMC = 5; //CAN
         public static final int intakeSN = 1; //PCM 
@@ -45,4 +45,12 @@ public class Map{
     public static final int turnRevolverButton = 2;
     public static final int shootAllBalls = 3;
     public static final int aim = 4;
+    public static final int climbUp = 5;
+    public static final int climbDown = 6;
+    public static final int intakeDown = 7;
+    public static final int intakeUp = 8;
+
+    //Subsystem speeds
+    public static final double climbSpeed = 0.2;
+    public static final double inSpeed = 0.5;
 }
