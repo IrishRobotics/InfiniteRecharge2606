@@ -1,0 +1,15 @@
+on the joystick 1 represents the trigger
+then it looks like this
+
+    4   3   5
+        
+        2
+
+
+Then the 6 buttons around the base are 
+
+6           11
+    (joy)
+7           10
+    8   9    (bottom 2 are smaller buttons around axis 3 which is a
+                    little throttle)

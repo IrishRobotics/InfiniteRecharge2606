@@ -47,6 +47,9 @@ public class Robot extends TimedRobot {
     //Calculate angle of joystick y
     double left  = (Map.reverse ? 1 : -1) * _leftFL.getRawAxis(1)  * Map.speedMax; 
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
+    
+
+
 
     //Dead space in joy stick
     left  = Math.abs(left)  < 0.10 ? 0 : left;

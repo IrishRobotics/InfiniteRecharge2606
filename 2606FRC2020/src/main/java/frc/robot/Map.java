@@ -40,4 +40,9 @@ public class Map{
 
     /* Nonzero to block the config until success, zero to skip checking */
     public static final int kTimeoutMs = 30;
+
+    //Controls
+    public static final int turnRevolverButton = 2;
+    public static final int shootAllBalls = 3;
+    public static final int aim = 4;
 }
