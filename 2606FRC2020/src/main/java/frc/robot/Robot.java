@@ -19,6 +19,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Compressor;
 
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.*;
@@ -37,12 +39,16 @@ public class Robot extends TimedRobot {
   WPI_VictorSPX _rightBack = new WPI_VictorSPX(Map.backRightVictor);
   WPI_VictorSPX _leftBack = new WPI_VictorSPX(Map.backLeftVictor);
 
+  
   //Diffrential Drive setup for front motors 
   DifferentialDrive _diffDrive = new DifferentialDrive(_leftFront, _rightFront);
 
   //Init flight sticks
   Joystick _leftFL = new Joystick(Map.leftFLUsb);
   Joystick _rightFL = new Joystick(Map.rightFLUsb);
+
+  //Solenoid for intake pressure
+  Solenoid intakePush = new Solenoid(Map.intakeSN);
 
   @Override
   public void teleopPeriodic() {
@@ -63,6 +69,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    
+    intakePush.clearAllPCMStickyFaults();
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -103,6 +112,7 @@ public class Robot extends TimedRobot {
 
     //OBlog shuffleboard setup
     Logger.configureLoggingAndConfig(this, false);
+
   }
 
   @Override

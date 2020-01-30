@@ -11,7 +11,7 @@ public class Map{
         public static final int frontRightTalon = 1; //CAN
             public static final int frontRightEncoder = 0; //PID
         public static final int frontLeftTalon = 2; //CAN
-            public static final int frontLeftEncoder = 1; //PID
+        public static final int frontLeftEncoder = 1; //PID
         public static final int backRightVictor = 3; //CAN
         public static final int backLeftVictor = 4; //CAN
         //Intake
@@ -26,6 +26,10 @@ public class Map{
         //Lift
         public static final int liftMC = 8; //CAN
             //public static final int liftMC2 = 9; //CAN 
+        //Compressor(s)
+        public static final int compressorCAN = 0; //PCM.can
+        public static final int compressorRelay = 1;
+
         
 
     //Usb constant for flight stick usb usally 0 and 1 
