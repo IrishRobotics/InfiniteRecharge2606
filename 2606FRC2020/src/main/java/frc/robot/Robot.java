@@ -20,10 +20,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Compressor;
 
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.*;
+
 //https://oblog-docs.readthedocs.io/en/latest/getting-started.html
 //https://oblog-docs.readthedocs.io/en/latest/   https://github.com/Oblarg/Oblog
 
