@@ -8,6 +8,7 @@
 package frc.robot;
 
 import frc.robot.Map;
+import frc.robot.SubsystemCollection;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,10 +17,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.wpilibj.Spark;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Encoder;
 
 import io.github.oblarg.oblog.Logger;
 import io.github.oblarg.oblog.*;
@@ -38,7 +40,12 @@ public class Robot extends TimedRobot {
   WPI_TalonSRX _leftFront = new WPI_TalonSRX(Map.frontLeftTalon);
   WPI_VictorSPX _rightBack = new WPI_VictorSPX(Map.backRightVictor);
   WPI_VictorSPX _leftBack = new WPI_VictorSPX(Map.backLeftVictor);
+  WPI_VictorSPX _climbUp = new WPI_VictorSPX(Map.climbUp);
+  WPI_VictorSPX _climbDown = new WPI_VictorSPX(Map.climbDown);
+  WPI_TalonSRX _revolver = new WPI_TalonSRX(Map.revolver);
+  WPI_TalonSRX _shooter = new WPI_TalonSRX(Map.revolver);
 
+  Spark _intakeSpark = new Spark(Map.intake);
   
   //Diffrential Drive setup for front motors 
   DifferentialDrive _diffDrive = new DifferentialDrive(_leftFront, _rightFront);
@@ -47,8 +54,7 @@ public class Robot extends TimedRobot {
   Joystick _leftFL = new Joystick(Map.leftFLUsb);
   Joystick _rightFL = new Joystick(Map.rightFLUsb);
 
-  //Solenoid for intake pressure
-  Solenoid intakePush = new Solenoid(Map.intakeSN);
+  Encoder revolverEncoder;
 
   @Override
   public void teleopPeriodic() {
@@ -56,8 +62,11 @@ public class Robot extends TimedRobot {
     double left  = (Map.reverse ? 1 : -1) * _leftFL.getRawAxis(1)  * Map.speedMax; 
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
     
-
-
+    SubsystemCollection.intake(_rightFL, _intakeSpark);
+    SubsystemCollection.turnIndexerOneTurn(_rightFL, _revolver);
+    //SubsystemCollection.shootAllBall(joy, sho, rev);
+    SubsystemCollection.climb(_leftFL, _climbUp);
+    SubsystemCollection.raiseClimber(_leftFL, _climbDown);
 
     //Dead space in joy stick
     left  = Math.abs(left)  < 0.10 ? 0 : left;
@@ -69,8 +78,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    revolverEncoder = new Encoder(/*Channel A*/0, /*Channel B*/1);
+    revolverEncoder.setDistancePerPulse(21); // 7/4 is the ratio points per rotation 12 turn is 21 NOTE may need to be quaditure which is 84
     
-    intakePush.clearAllPCMStickyFaults();
+    
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);

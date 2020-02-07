@@ -8,28 +8,24 @@ public class Map{
     //CAN(Controller Area Network) -- PWM (Pulse Width Modulation)  
     //PCM (Pneumatics Control Module) -- PID (Proportional Integral Derivative)
         //Drive Train
-        public static final int frontRightTalon = 1; //CAN
+        public static final int frontRightTalon = 3; //CAN
             public static final int frontRightEncoder = 0; //PID
-        public static final int frontLeftTalon = 2; //CAN
-        public static final int frontLeftEncoder = 1; //PID
-        public static final int backRightVictor = 3; //CAN
-        public static final int backLeftVictor = 4; //CAN
+        public static final int frontLeftTalon = 1; //CAN
+            public static final int frontLeftEncoder = 1; //PID
+        public static final int backRightVictor = 4; //CAN
+        public static final int backLeftVictor = 2; //CAN
+        
         //Intake
-        public static final int intakeMC = 5; //CAN
-        public static final int intakeSN = 1; //PCM 
+        public static final int intake = 0; //PWM 
+        
         //Indexer (Revolver)
-        public static final int revolver = 6; //CAN
-            //public static final int revolverPush = CANADDRESS; //CAN
+        public static final int revolver = 5; //CAN
+        
         //Fly Wheel
-        public static final int flyMotor = 7; //CAN
-        public static final int flySN = 2; //PCM
+        public static final int flyMotor = 6; //CAN
         //Lift
-        public static final int liftMC = 8; //CAN
-            //public static final int liftMC2 = 9; //CAN 
-        //Compressor(s)
-        public static final int compressorCAN = 0; //PCM.can
-        public static final int compressorRelay = 1;
-
+        public static final int liftUp = 7; //CAN
+        public static final int pullDown = 8;
         
 
     //Usb constant for flight stick usb usally 0 and 1 
