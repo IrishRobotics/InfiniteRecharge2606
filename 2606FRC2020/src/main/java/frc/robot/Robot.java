@@ -99,6 +99,8 @@ public class Robot extends TimedRobot {
     _leftBack.configFactoryDefault();
 
     /* set up followers */
+
+    
     _rightBack.follow(_rightFront);
     _leftBack.follow(_leftFront);
 

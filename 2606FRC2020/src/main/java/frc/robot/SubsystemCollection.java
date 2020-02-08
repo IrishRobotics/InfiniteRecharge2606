@@ -58,6 +58,8 @@ public class SubsystemCollection{
             right.set(ControlMode.PercentOutput, 0.2* ratio);
             left.set(ControlMode.PercentOutput, 0.2);
         }
+        leftEnc.reset();
+        rightEnc.reset();
     }
     public static void turnDegrees(WPI_TalonSRX right, WPI_TalonSRX left,Encoder rightEnc, Encoder leftEnc, double degreesLeft){
         double rotationsToTurn = (((28.0*Math.PI)/360)*degreesLeft)/(6*Math.PI);
