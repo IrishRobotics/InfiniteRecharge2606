@@ -44,8 +44,11 @@ public class Robot extends TimedRobot {
   WPI_VictorSPX _climbDown = new WPI_VictorSPX(Map.climbDown);
   WPI_TalonSRX _revolver = new WPI_TalonSRX(Map.revolver);
   WPI_TalonSRX _shooter = new WPI_TalonSRX(Map.revolver);
-
   Spark _intakeSpark = new Spark(Map.intake);
+
+
+  Encoder leftEncoder;
+  Encoder rightEncoder;
   
   //Diffrential Drive setup for front motors 
   DifferentialDrive _diffDrive = new DifferentialDrive(_leftFront, _rightFront);
@@ -63,7 +66,7 @@ public class Robot extends TimedRobot {
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
     
     SubsystemCollection.intake(_rightFL, _intakeSpark);
-    SubsystemCollection.turnIndexerOneTurn(_rightFL, _revolver);
+    SubsystemCollection.turnIndexerOneTurn(_rightFL, _revolver, revolverEncoder);
     //SubsystemCollection.shootAllBall(joy, sho, rev);
     SubsystemCollection.climb(_leftFL, _climbUp);
     SubsystemCollection.raiseClimber(_leftFL, _climbDown);
@@ -80,8 +83,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     revolverEncoder = new Encoder(/*Channel A*/0, /*Channel B*/1);
     revolverEncoder.setDistancePerPulse(21); // 7/4 is the ratio points per rotation 12 turn is 21 NOTE may need to be quaditure which is 84
-    
-    
+    rightEncoder = new Encoder(0,1);
+    leftEncoder = new Encoder(0,1);
+    rightEncoder.setDistancePerPulse(1024); // 1024 is the 1 rotation ratio but again quaditure is 4096
+    leftEncoder.setDistancePerPulse(1024); // 1024 is the 1 rotation ratio but again quaditure is 4096
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
