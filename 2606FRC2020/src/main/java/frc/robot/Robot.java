@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Encoder;
 
 import io.github.oblarg.oblog.Logger;
+import io.github.oblarg.oblog.annotations.Log;
+//import sun.awt.AWTAccessor.SystemColorAccessor;
 import io.github.oblarg.oblog.*;
 
 //https://oblog-docs.readthedocs.io/en/latest/getting-started.html
@@ -40,12 +42,15 @@ public class Robot extends TimedRobot {
   WPI_TalonSRX _leftFront = new WPI_TalonSRX(Map.frontLeftTalon);
   WPI_VictorSPX _rightBack = new WPI_VictorSPX(Map.backRightVictor);
   WPI_VictorSPX _leftBack = new WPI_VictorSPX(Map.backLeftVictor);
-  WPI_VictorSPX _climbUp = new WPI_VictorSPX(Map.climbUp);
-  WPI_VictorSPX _climbDown = new WPI_VictorSPX(Map.climbDown);
-  WPI_TalonSRX _revolver = new WPI_TalonSRX(Map.revolver);
-  WPI_TalonSRX _shooter = new WPI_TalonSRX(Map.revolver);
-  Spark _intakeSpark = new Spark(Map.intake);
 
+  WPI_VictorSPX _climbUp = new WPI_VictorSPX(Map.climbUp);
+  Spark _climbDown = new Spark(Map.climbDown);
+  
+  Spark _shooterLoader = new Spark(Map.loader);
+  WPI_TalonSRX _shooter = new WPI_TalonSRX(Map.revolver);
+
+  WPI_TalonSRX _revolver = new WPI_TalonSRX(Map.revolver);
+  WPI_VictorSPX _intakeVictor = new WPI_VictorSPX(Map.intake);
 
   Encoder leftEncoder;
   Encoder rightEncoder;
@@ -59,17 +64,24 @@ public class Robot extends TimedRobot {
 
   Encoder revolverEncoder;
 
+  //Logs
+  @Log
+  double distRight;
+  @Log
+  double distLeft;
+
   @Override
   public void teleopPeriodic() {
     //Calculate angle of joystick y
     double left  = (Map.reverse ? 1 : -1) * _leftFL.getRawAxis(1)  * Map.speedMax; 
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
     
-    SubsystemCollection.intake(_rightFL, _intakeSpark);
+    SubsystemCollection.warmUpWheel(_shooter );
+    SubsystemCollection.intake(_rightFL, _intakeVictor);
     SubsystemCollection.turnIndexerOneTurn(_rightFL, _revolver, revolverEncoder);
     //SubsystemCollection.shootAllBall(joy, sho, rev);
-    SubsystemCollection.climb(_leftFL, _climbUp);
-    SubsystemCollection.raiseClimber(_leftFL, _climbDown);
+    SubsystemCollection.climb(_leftFL, _climbDown);
+    SubsystemCollection.raiseClimber(_leftFL, _climbUp);
 
     //Dead space in joy stick
     left  = Math.abs(left)  < 0.10 ? 0 : left;
@@ -77,6 +89,11 @@ public class Robot extends TimedRobot {
 
     //Do diffrential Drive based on tank drive
     _diffDrive.tankDrive(left, right);
+
+
+    //logs
+    distRight = rightEncoder.getDistance();
+    distLeft = leftEncoder.getDistance(); 
   }
 
   @Override
@@ -152,11 +169,11 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        // Put custom auto code here
+        SubsystemCollection.turnDegrees(_rightFront, _leftFront, rightEncoder, leftEncoder, 20);
         break;
       case kDefaultAuto:
       default:
-        // Put default auto code here
+        SubsystemCollection.moveDistance(_rightFront, _leftFront, rightEncoder, leftEncoder, 1);
         break;
     }
   }

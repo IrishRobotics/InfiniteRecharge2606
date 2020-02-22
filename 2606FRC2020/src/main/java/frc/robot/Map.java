@@ -8,24 +8,25 @@ public class Map{
     //CAN(Controller Area Network) -- PWM (Pulse Width Modulation)  
     //PCM (Pneumatics Control Module) -- PID (Proportional Integral Derivative)
         //Drive Train
-        public static final int frontRightTalon = 3; //CAN
+        public static final int frontRightTalon = 1; //CAN
             public static final int frontRightEncoder = 0; //PID
-        public static final int frontLeftTalon = 1; //CAN
+        public static final int frontLeftTalon = 8; //CAN
             public static final int frontLeftEncoder = 1; //PID
-        public static final int backRightVictor = 4; //CAN
-        public static final int backLeftVictor = 2; //CAN
+        public static final int backRightVictor = 2; //CAN
+        public static final int backLeftVictor = 7; //CAN
         
         //Intake
-        public static final int intake = 0; //PWM 
+        public static final int intake = 5; //can 
         
         //Indexer (Revolver)
-        public static final int revolver = 5; //CAN
+        public static final int revolver = 3; //CAN
         
         //Fly Wheel
         public static final int flyMotor = 6; //CAN
+        public static final int loader = 1; //PWM
         //Lift
-        public static final int liftUp = 7; //CAN
-        public static final int pullDown = 8;
+        public static final int liftUp = 4; //CAN
+        public static final int pullDown = 0; // pwm
         
 
     //Usb constant for flight stick usb usally 0 and 1 
@@ -45,10 +46,8 @@ public class Map{
     public static final int turnRevolverButton = 2;
     public static final int shootAllBalls = 3;
     public static final int aim = 4;
-    public static final int climbUp = 5;
-    public static final int climbDown = 6;
-    public static final int intakeDown = 7;
-    public static final int intakeUp = 8;
+    public static final int climbUp = 8;
+    public static final int climbDown = 9;
 
     //Subsystem speeds
     public static final double climbSpeed = 0.2;
