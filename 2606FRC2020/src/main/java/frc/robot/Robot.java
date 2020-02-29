@@ -76,11 +76,26 @@ public class Robot extends TimedRobot {
     double left  = (Map.reverse ? 1 : -1) * _leftFL.getRawAxis(1)  * Map.speedMax; 
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
     
+    
     SubsystemCollection.warmUpWheel(_shooter );
+    
+    //Right Trigger
     SubsystemCollection.intake(_rightFL, _intakeVictor);
+    
+    //Right thumb button 2
     SubsystemCollection.turnIndexerOneTurn(_rightFL, _revolver, revolverEncoder);
+    
+    //Turn Right 10 degrees right 11
+    if(_rightFL.getRawButton(11)){
+      SubsystemCollection.turnDegrees(_rightFront, _leftFront, rightEncoder, leftEncoder, -10);
+    }
+    
     //SubsystemCollection.shootAllBall(joy, sho, rev);
+    
+    //Left button 9
     SubsystemCollection.climb(_leftFL, _climbDown);
+    
+    //Left button 8
     SubsystemCollection.raiseClimber(_leftFL, _climbUp);
 
     //Dead space in joy stick
@@ -99,11 +114,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     revolverEncoder = new Encoder(/*Channel A*/0, /*Channel B*/1);
-    revolverEncoder.setDistancePerPulse(21); // 7/4 is the ratio points per rotation 12 turn is 21 NOTE may need to be quaditure which is 84
+    revolverEncoder.setDistancePerPulse(84); // 7/4 is the ratio points per rotation 12 turn is 21 NOTE may need to be quaditure which is 84
     rightEncoder = new Encoder(0,1);
     leftEncoder = new Encoder(0,1);
-    rightEncoder.setDistancePerPulse(1024); // 1024 is the 1 rotation ratio but again quaditure is 4096
-    leftEncoder.setDistancePerPulse(1024); // 1024 is the 1 rotation ratio but again quaditure is 4096
+    rightEncoder.setDistancePerPulse(4096); // 1024 is the 1 rotation ratio but again quaditure is 4096
+    leftEncoder.setDistancePerPulse(4096); // 1024 is the 1 rotation ratio but again quaditure is 4096
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
