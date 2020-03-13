@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.Spark;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.hal.sim.DriverStationSim;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 
 import io.github.oblarg.oblog.Logger;
@@ -43,17 +45,16 @@ public class Robot extends TimedRobot {
   WPI_VictorSPX _rightBack = new WPI_VictorSPX(Map.backRightVictor);
   WPI_VictorSPX _leftBack = new WPI_VictorSPX(Map.backLeftVictor);
 
-  WPI_VictorSPX _climbUp = new WPI_VictorSPX(Map.climbUp);
+  WPI_VictorSPX _climbUp = new WPI_VictorSPX(Map.liftUp);
   Spark _climbDown = new Spark(Map.climbDown);
   
   Spark _shooterLoader = new Spark(Map.loader);
-  WPI_TalonSRX _shooter = new WPI_TalonSRX(Map.revolver);
+  WPI_TalonSRX _shooter = new WPI_TalonSRX(Map.flyMotor);
 
   WPI_TalonSRX _revolver = new WPI_TalonSRX(Map.revolver);
   WPI_VictorSPX _intakeVictor = new WPI_VictorSPX(Map.intake);
 
-  Encoder leftEncoder;
-  Encoder rightEncoder;
+  Encoder revolverEncoder;
   
   //Diffrential Drive setup for front motors 
   DifferentialDrive _diffDrive = new DifferentialDrive(_leftFront, _rightFront);
@@ -62,13 +63,11 @@ public class Robot extends TimedRobot {
   Joystick _leftFL = new Joystick(Map.leftFLUsb);
   Joystick _rightFL = new Joystick(Map.rightFLUsb);
 
-  Encoder revolverEncoder;
-
-  //Logs
-  @Log
-  double distRight;
-  @Log
-  double distLeft;
+  // //Logs
+  // @Log
+  // double distRight;
+  // @Log
+  // double distLeft;
 
   @Override
   public void teleopPeriodic() {
@@ -76,25 +75,39 @@ public class Robot extends TimedRobot {
     double left  = (Map.reverse ? 1 : -1) * _leftFL.getRawAxis(1)  * Map.speedMax; 
     double right = (Map.reverse ? 1 : -1) * _rightFL.getRawAxis(1) * Map.speedMax; 
     
+    //System.out.println(_climbDown.isAlive() + " "+ _shooterLoader.isAlive());
+    DriverStation.reportError(_climbDown.get() + " "+
+    _shooterLoader.get(), false);
+
+    SubsystemCollection.warmUpWheel(_shooter);
     
-    SubsystemCollection.warmUpWheel(_shooter );
+    SubsystemCollection.offCheck(_revolver, _climbUp, _climbDown, _intakeVictor, _shooterLoader);
     
     //Right Trigger
     SubsystemCollection.intake(_rightFL, _intakeVictor);
     
+    //Shoot all balls
+    SubsystemCollection.shootAllBall(_leftFL, _shooter, _revolver, _shooterLoader); 
+
     //Right thumb button 2
     SubsystemCollection.turnIndexerOneTurn(_rightFL, _revolver, revolverEncoder);
     
     //Turn Right 10 degrees right 11
-    if(_rightFL.getRawButton(11)){
-      SubsystemCollection.turnDegrees(_rightFront, _leftFront, rightEncoder, leftEncoder, -10);
-    }
+    // if(_rightFL.getRawButton(11)){
+    //   SubsystemCollection.turnDegrees(_rightFront, _leftFront, rightEncoder, leftEncoder, -10);
+    // }
     
+    SubsystemCollection.turnTest(_rightFL, 6, _rightFront);
+    SubsystemCollection.turnTest(_rightFL, 7, _rightFront);
+
     //SubsystemCollection.shootAllBall(joy, sho, rev);
     
+    //left 11
+    SubsystemCollection.lowerClimber(_leftFL, _climbUp);
+
     //Left button 9
-    SubsystemCollection.climb(_leftFL, _climbDown);
-    
+    SubsystemCollection.climberUp(_leftFL, _climbDown);
+
     //Left button 8
     SubsystemCollection.raiseClimber(_leftFL, _climbUp);
 
@@ -104,21 +117,13 @@ public class Robot extends TimedRobot {
 
     //Do diffrential Drive based on tank drive
     _diffDrive.tankDrive(left, right);
-
-
-    //logs
-    distRight = rightEncoder.getDistance();
-    distLeft = leftEncoder.getDistance(); 
   }
 
   @Override
   public void robotInit() {
     revolverEncoder = new Encoder(/*Channel A*/0, /*Channel B*/1);
     revolverEncoder.setDistancePerPulse(84); // 7/4 is the ratio points per rotation 12 turn is 21 NOTE may need to be quaditure which is 84
-    rightEncoder = new Encoder(0,1);
-    leftEncoder = new Encoder(0,1);
-    rightEncoder.setDistancePerPulse(4096); // 1024 is the 1 rotation ratio but again quaditure is 4096
-    leftEncoder.setDistancePerPulse(4096); // 1024 is the 1 rotation ratio but again quaditure is 4096
+    // 1024 is the 1 rotation ratio but again quaditure is 4096 // 1024 is the 1 rotation ratio but again quaditure is 4096
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -163,6 +168,9 @@ public class Robot extends TimedRobot {
     //OBlog shuffleboard setup
     Logger.configureLoggingAndConfig(this, false);
 
+    _climbDown.checkMotors();
+    _shooterLoader.checkMotors();
+
   }
 
   @Override
@@ -184,11 +192,11 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        SubsystemCollection.turnDegrees(_rightFront, _leftFront, rightEncoder, leftEncoder, 20);
+        //SubsystemCollection.turnDegrees(_rightFront, _leftFront, rightEncoder, leftEncoder, 20);
         break;
       case kDefaultAuto:
       default:
-        SubsystemCollection.moveDistance(_rightFront, _leftFront, rightEncoder, leftEncoder, 1);
+        //SubsystemCollection.moveDistance(_rightFront, _leftFront, rightEncoder, leftEncoder, 1);
         break;
     }
   }

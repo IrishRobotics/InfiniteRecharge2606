@@ -16,15 +16,21 @@ import com.fasterxml.jackson.databind.ObjectWriter.Prefetch;
 
 public class SubsystemCollection{
     public static void warmUpWheel(WPI_TalonSRX sho){
-        sho.set(ControlMode.PercentOutput, 0.7);
+        sho.set(ControlMode.PercentOutput, -0.7);
+    }
+
+    // tal  vic spark vic spark
+    public static void offCheck(WPI_TalonSRX one, WPI_VictorSPX four, Spark three, WPI_VictorSPX five, Spark two){
+        one.set(ControlMode.PercentOutput, 0);
+        //two.set(0);
+        //three.set(0);
+        four.set(ControlMode.PercentOutput, 0);
+        five.set(ControlMode.PercentOutput, 0);
     }
 
     public static void intake(Joystick joy, WPI_VictorSPX in){
         if(joy.getTrigger()){
             in.set(ControlMode.PercentOutput, Map.inSpeed);
-        }
-        else{
-            in.set(ControlMode.PercentOutput, 0);
         }
     }
 
@@ -35,19 +41,13 @@ public class SubsystemCollection{
             }
             revEnc.reset();
         }
-        else{
-            tal.set(ControlMode.PercentOutput, 0);
-        }
     }
 
-    public static void shootAllBall(Joystick joy, WPI_TalonSRX sho, WPI_TalonSRX rev){
+    public static void shootAllBall(Joystick joy, WPI_TalonSRX sho, WPI_TalonSRX rev, Spark loader){
         if(joy.getRawButton(Map.shootAllBalls)){
             rev.set(ControlMode.PercentOutput, 0.2);
-            sho.set(ControlMode.PercentOutput, 1);
-        }
-        else{
-            rev.set(ControlMode.PercentOutput, 0);
-            sho.set(ControlMode.PercentOutput, 0);
+            sho.set(ControlMode.PercentOutput, -1);
+            loader.set(1);
         }
     }
 
@@ -55,17 +55,16 @@ public class SubsystemCollection{
         if(joy.getRawButton(Map.climbUp)){
             vic.set(ControlMode.PercentOutput, Map.climbSpeed);
         }
-        else{
-            vic.set(ControlMode.PercentOutput, 0);
+    }
+    public static void lowerClimber(Joystick joy, WPI_VictorSPX vic){
+        if(joy.getRawButton(Map.climbUpDown)){
+            vic.set(ControlMode.PercentOutput, -1 * Map.climbSpeed);
         }
     }
 
-    public static void climb(Joystick joy, Spark spk){
+    public static void climberUp(Joystick joy, Spark spk){
         if(joy.getRawButton(Map.climbDown)){
-            spk.set(Map.climbSpeed);
-        }
-        else{
-            spk.set(0);
+            spk.set(-0.01);
         }
     }
     public static void moveDistance(WPI_TalonSRX right, WPI_TalonSRX left,Encoder rightEnc, Encoder leftEnc, double disInInches){
@@ -97,33 +96,26 @@ public class SubsystemCollection{
             }
             revEnc.reset();
         }
-        else{
-            load.set(0);
-
-        }
     }
     public static void turnMotor(Joystick joy, int button, WPI_TalonSRX tal){
         if(joy.getRawButton(button)){
             tal.set(ControlMode.PercentOutput, 0.1);
-        }
-        else{
-            tal.set(ControlMode.PercentOutput, 0);
         }
     }
     public static void turnMotor(Joystick joy, int button, WPI_VictorSPX vic){
         if(joy.getRawButton(button)){
             vic.set(ControlMode.PercentOutput, 0.1);
         }
-        else{
-            vic.set(ControlMode.PercentOutput, 0);
-        }
     }
     public static void turnMotor(Joystick joy, int button, Spark spk){
         if(joy.getRawButton(button)){
             spk.set(0.1);
         }
-        else{
-            spk.set(0);
+    }
+    public static void turnTest(Joystick joy, int button, WPI_TalonSRX tal){
+        if(joy.getRawButton(button)){
+            tal.set(ControlMode.Position, 1024);
         }
+        tal.clearMotionProfileTrajectories();
     }
 }
